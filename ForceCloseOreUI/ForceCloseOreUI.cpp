@@ -17,10 +17,11 @@ extern "C" double frexp(double x, int* exp) {
     return std::frexp(x, exp);
 }
 
+#if __aarch64__
 extern "C" long double frexpl(long double x, int* exp) {
     return std::frexp(x, exp);
 }
-
+#endif
 
 //==========================================================================================================================================
 
@@ -116,7 +117,6 @@ void __attribute__((destructor)) dispose() {
 
 static void loader_invocation_listener_class_init(LoaderInvocationListenerClass* klass) {
     (void)LOADER_IS_INVOCATION_LISTENER;
-    //(void)glib_autoptr_cleanup_LoaderInvocationListener;
 }
 
 static void loader_invocation_listener_iface_init(gpointer g_iface, gpointer iface_data) {
@@ -130,7 +130,7 @@ static void loader_invocation_listener_init(LoaderInvocationListener* self) {
 }
 
 
-#define LOG_TAG "MyNativeModule"
+#define LOG_TAG "ForceCloseOreUI"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 

@@ -5,9 +5,5 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ForceCloseOreUI.h" />
-    <ClInclude Include="pch.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="frida\arm64\lib\libfrida-gum.a" />
   </ItemGroup>
 </Project>
