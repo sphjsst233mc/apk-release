@@ -85,6 +85,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>Clang_5_0</PlatformToolset>
     <UseOfStl>c++_shared</UseOfStl>
+    <ThumbMode>Thumb</ThumbMode>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -102,18 +103,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <IncludePath>$(ProjectDir)\frida\arm64\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\GlossHook\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>
     </LibraryPath>
-    <TargetName>lib$(RootNamespace)-arm64</TargetName>
+    <TargetName>lib$(RootNamespace)</TargetName>
+    <OutDir>$(SolutionDir)builds\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)builds\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(ProjectDir)\frida\arm\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\frida\arm\lib</LibraryPath>
-    <TargetName>lib$(RootNamespace)-arm</TargetName>
+    <IncludePath>$(ProjectDir)\GlossHook\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>
+    </LibraryPath>
+    <TargetName>lib$(RootNamespace)</TargetName>
+    <OutDir>$(SolutionDir)builds\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)builds\$(Platform)\$(Configuration)\</IntDir>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>
+    </ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -150,10 +159,11 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalDependencies>$(ProjectDir)frida\arm64\lib\libfrida-gum.a</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)GlossHook\lib\ARM64\libGlossHook.a</AdditionalDependencies>
       <DebuggerSymbolInformation>OmitAllSymbolInformation</DebuggerSymbolInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -167,17 +177,24 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalOptions>-lm %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(ProjectDir)frida\arm\lib\libfrida-gum.a</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)GlossHook\lib\ARM\libGlossHook.a</AdditionalDependencies>
+      <AdditionalOptions>-lm -lc -Wl,--wrap=getpagesize %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ForceCloseOreUI.cpp" />
+    <ClCompile Include="..\src\ForceCloseOreUI.cpp" />
+    <ClCompile Include="memory\Hook.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ForceCloseOreUI.h" />
+    <ClInclude Include="..\src\ForceCloseOreUI.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="memory\Hook.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
