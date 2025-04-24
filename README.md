@@ -1,23 +1,17 @@
 # ForceCloseOreUI
 
-Force close OreUI
+强制关闭 OreUI
 
-## How to use
+## 使用方法
 
-1. Extract libminecraftpe.so from the Minecraft APK.
-2. Download or manually compile the .so files from the [releases](https://github.com/dreamguxiang/ForceCloseOreUI-Android/releases/latest).
-3. Download [patchelf](https://github.com/NixOS/patchelf/releases/latest).
-4. For 32 bit (armeabi-v7a) Minecraft run the following command:
+1. 从 Minecraft APK 中提取 **libminecraftpe.so** 文件
+2. 从[发布页面](https://github.com/Yejdhi/ForceCloseOreUI-Android/releases/tag/Release)下载或手动编译 **.so** 文件
+3. 查看 [视频教程](暂且无链接) 了解操作流程
+4. 针对 64 位 (arm64-v8a) 版本 Minecraft 运行以下命令：
 
-```
-patchelf --add-needed libForceCloseOreUI-arm.so libminecraftpe.so
-```
-
-5. For 64 bit (arm-v8a) Minecraft run the following command:
-
-```
+```bash
 patchelf --add-needed libForceCloseOreUI-arm64.so libminecraftpe.so
 ```
 
-7. Put the modified **libminecraftpe.so** and **libForceCloseOreUI.so** file back into the apk
-8. Sign and install.
+5. 将修改后的 **libminecraftpe.so** 和 **libForceCloseOreUI.so** 文件放回 APK 中
+6. 签名并安装 APK
