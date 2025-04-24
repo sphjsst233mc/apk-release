@@ -1,6 +1,7 @@
 # ForceCloseOreUI
 
-强制关闭 OreUI
+强制关闭 OreUI\
+**太好啦！！！jsonUI有救啦！！！**
 
 ## 使用方法
 
