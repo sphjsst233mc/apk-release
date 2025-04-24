@@ -7,7 +7,7 @@
 
 1. 可直接在 [下载](https://github.com/sphjsst233mc/apk-release/releases) 获取打包好的文件
 2. 查看 [视频教程](暂且无链接) 了解操作流程
-3. 从[发布页面](https://github.com/Yejdhi/ForceCloseOreUI-Android/releases/tag/Release)下载或手动编译 **.so** 文件
+3. 从[发布页面](https://github.com/Yejdhi/ForceCloseOreUI-Android/releases)下载或手动编译 **.so** 文件
 4. 从 Minecraft APK 中提取 **libminecraftpe.so** 文件
 5. **仅适用于 (arm64-v8a) 版本**，运行以下命令进行修改：
 
