@@ -3,6 +3,9 @@
 强制关闭 OreUI\
 **太好啦！！！jsonUI有救啦！！！**
 
+English\
+[EN_README](https://github.com/sphjsst233mc/apk-release/blob/master/EN_README.md)
+
 ## 使用方法
 
 1. 可直接在 [下载](https://github.com/sphjsst233mc/apk-release/releases) 获取打包好的文件
