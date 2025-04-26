@@ -15,37 +15,25 @@ jobs:
 
       - name: Build for Windows (DLL)
         run: |
-          xmake f -p windows -m release
+          xmake f -p windows -m release -v -y
           xmake
 
       - name: Upload DLL
         uses: actions/upload-artifact@v4
         with:
-          name: win-dll
+          name: windows
           path: build/windows/x64/release/*.dll
 
   build-android:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y unzip
 
       - name: Setup xmake
         uses: xmake-io/github-action-setup-xmake@v1
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Accept Licenses
-        run: yes | sdkmanager --licenses
-
-      - name: Install Build Tools 35.0.0
-        run: sdkmanager "build-tools;35.0.0"
-
-      - name: Verify installed SDK Packages
-        run: sdkmanager --list
 
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
@@ -54,14 +42,12 @@ jobs:
           link-to-sdk: true
 
       - name: Build for Android (SO)
-        env:
-          ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
         run: |
-          xmake f -p android --ndk=$ANDROID_NDK_HOME -a arm64-v8a -m release
+          xmake f -p android -a arm64-v8a -m release -v -y
           xmake
 
       - name: Upload SO
         uses: actions/upload-artifact@v4
         with:
-          name: android-so
+          name: android
           path: build/android/arm64-v8a/release/*.so
