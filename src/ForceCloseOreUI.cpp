@@ -1,52 +1,54 @@
-
-#include "ForceCloseOreUI.h"
-
+#include <functional>
 #include <string>
 #include <unordered_map>
 
-#include <memory/Hook.h>
+#include <api/memory/Hook.h>
 
 #if __arm__
 #include <unistd.h>
-extern "C" int __wrap_getpagesize() {
-    return sysconf(_SC_PAGESIZE);
-}
+extern "C" int __wrap_getpagesize() { return sysconf(_SC_PAGESIZE); }
 #endif
 
 class OreUIConfig {
 public:
-    void* mUnknown1;
-    void* mUnknown2;
-    std::function<bool()> mUnknown3;
-    std::function<bool()> mUnknown4;
+  void *mUnknown1;
+  void *mUnknown2;
+  std::function<bool()> mUnknown3;
+  std::function<bool()> mUnknown4;
 };
 
 class OreUi {
 public:
-    std::unordered_map<std::string, OreUIConfig> mConfigs;
+  std::unordered_map<std::string, OreUIConfig> mConfigs;
 };
 
-
-
-SKY_AUTO_STATIC_HOOK(
-    Hook1,
-    memory::HookPriority::Normal,
+// clang-format off
 #if __arm__
-    { "" },
+#define PATTERN 
+   {""}
+
 #elif __aarch64__
-    { "? ? ? D1 ? ? ? A9 ? ? ? 91 ? ? ? A9 ? ? ? A9 ? ? ? A9 ? ? ? D5 F5 03 03 2A ? ? ? F9 F6 03 02 2A F3 03 01 AA F4 03 00 AA ? ? ? F8 ? ? ? F9 ? ? ? B4 9F 00 08 EB" },
+#define PATTERN                                                                           \
+  {                                                                                       \
+    "? ? ? D1 ? ? ? A9 ? ? ? 91 ? ? ? A9 ? ? ? A9 ? ? ? A9 ? ? ? A9 ? ? ? A9 E8 03 03 AA" \
+  }
+
+#elif _WIN32
+#define PATTERN                                                                                                          \
+  {                                                                                                                      \
+    "40 53 55 56 57 41 54 41 55 41 56 41 57 48 83 EC 78 48 8B 05 ? ? ? ? 48 33 C4 48 89 44 24 ? 49 8B E9 4C 89 44 24"    \
+  }                                                                                                                      \
+
 #endif
-    void,
-    OreUi& a1,
-    int64_t a2,
-    bool a3,
-    bool a4,
-    void* a5,
-    void* a6
-) { 
-    origin(a1, a2, a3, a4, a5, a6);
-    for (auto& data : a1.mConfigs) {
-        data.second.mUnknown3 = []() { return false; };
-        data.second.mUnknown4 = []() { return false; };
-    }
-} 
+
+// clang-format on
+SKY_AUTO_STATIC_HOOK(Hook2, memory::HookPriority::Normal, PATTERN, void,
+                     void *a1, void *a2, void *a3, void *a4, void *a5, void *a6,
+                     void *a7, void *a8, void *a9, void *a10, OreUi &a11,
+                     void *a12) {
+  for (auto &data : a11.mConfigs) {
+    data.second.mUnknown3 = []() { return false; };
+    data.second.mUnknown4 = []() { return false; };
+  }
+  origin(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
+}
