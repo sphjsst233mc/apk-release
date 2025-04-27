@@ -1,6 +1,6 @@
 #pragma once
 
-#include "api/memory/Menory.h"
+#include "api/memory/Memory.h"
 
 #include <cstdint>
 #include <string>

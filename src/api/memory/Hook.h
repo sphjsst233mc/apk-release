@@ -1,9 +1,8 @@
 #pragma once
 
 #include "api/Macro.h"
-#include "api/memory/Menory.h"
+#include "api/memory/Memory.h"
 #include <type_traits>
-
 
 #define LOG(...)
 

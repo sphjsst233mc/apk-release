@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-#include "api/memory/Menory.h"
+#include "api/memory/Memory.h"
 
 uintptr_t operator"" _rva(uintptr_t rva);
 
