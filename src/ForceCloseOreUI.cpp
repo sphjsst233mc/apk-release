@@ -1,16 +1,19 @@
 #include <filesystem>
 #include <fstream>
 #include <functional>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <unordered_map>
 
-#include <api/memory/Hook.h>
-
-#include <nlohmann/json.hpp>
+#include "api/memory/Hook.h"
 
 #if __arm__
 #include <unistd.h>
 extern "C" int __wrap_getpagesize() { return sysconf(_SC_PAGESIZE); }
+
+#endif
+#if __arm__ || __aarch64__
+#include <dlfcn.h>
 #endif
 
 class OreUIConfig {
@@ -45,16 +48,42 @@ public:
 
 #endif
 
-namespace{
-  std::string dirPath = "mods/ForceCloseOreUI/";
-  std::string filePath = dirPath + "config.json";
-  nlohmann::json outputJson;
-
 // clang-format on
+
+namespace {
+std::string getLibDirFromDlAddr() {
+#if defined(_WIN32)
+  return "";
+#else
+  Dl_info info;
+  if (dladdr((void *)&getLibDirFromDlAddr, &info) && info.dli_fname) {
+    std::string libPath = info.dli_fname;
+    size_t pos = libPath.rfind('/');
+    if (pos != std::string::npos)
+      return libPath.substr(0, pos + 1);
+  }
+  return "";
+#endif
+}
+
+std::string getConfigDir() {
+#if defined(_WIN32)
+  return "mods/ForceCloseOreUI/";
+#else
+  return "/storage/emulated/0/games/ForceCloseOreUI/";
+#endif
+}
+
+nlohmann::json outputJson;
+std::string dirPath = getConfigDir();
+std::string filePath = dirPath + "config.json";
+
 SKY_AUTO_STATIC_HOOK(Hook2, memory::HookPriority::Normal, PATTERN, void,
                      void *a1, void *a2, void *a3, void *a4, void *a5, void *a6,
                      void *a7, void *a8, void *a9, void *a10, OreUi &a11,
                      void *a12) {
+
+
 
   if (!std::filesystem::exists(filePath)) {
     for (auto &data : a11.mConfigs) {
