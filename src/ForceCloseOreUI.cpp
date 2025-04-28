@@ -12,9 +12,6 @@
 extern "C" int __wrap_getpagesize() { return sysconf(_SC_PAGESIZE); }
 
 #endif
-#if __arm__ || __aarch64__
-#include <dlfcn.h>
-#endif
 
 class OreUIConfig {
 public:
@@ -51,24 +48,52 @@ public:
 // clang-format on
 
 namespace {
-std::string getLibDirFromDlAddr() {
+
 #if defined(_WIN32)
-  return "";
-#else
-  Dl_info info;
-  if (dladdr((void *)&getLibDirFromDlAddr, &info) && info.dli_fname) {
-    std::string libPath = info.dli_fname;
-    size_t pos = libPath.rfind('/');
-    if (pos != std::string::npos)
-      return libPath.substr(0, pos + 1);
+
+std::string getLocalAppDataPath() {
+  char path[260];
+  size_t len;
+  getenv_s(&len, path, sizeof(path), "LOCALAPPDATA");
+  if (len > 0) {
+    return std::string(path);
   }
-  return "";
+  char userProfile[260];
+  getenv_s(&len, userProfile, sizeof(userProfile), "USERPROFILE");
+  if (len > 0) {
+    return std::string(userProfile) + "\\AppData\\Local";
+  }
+  return ".";
+}
+
+std::string getUWPModsDir() {
+  std::string appDataPath = getLocalAppDataPath();
+  std::string uwpMods = appDataPath + "\\mods\\ForceCloseOreUI\\";
+  return uwpMods;
+}
 #endif
+
+bool testDirWritable(const std::string &dir) {
+  std::error_code _;
+  std::filesystem::create_directories(dir, _);
+  std::string testFile = dir + "._perm_test";
+  std::ofstream ofs(testFile);
+  bool ok = ofs.is_open();
+  ofs.close();
+  if (ok)
+    std::filesystem::remove(testFile, _);
+  return ok;
 }
 
 std::string getConfigDir() {
 #if defined(_WIN32)
-  return "mods/ForceCloseOreUI/";
+  std::string primary = "mods/ForceCloseOreUI/";
+  if (testDirWritable(primary))
+    return primary;
+  std::string fallback = getUWPModsDir();
+  if (testDirWritable(fallback))
+    return fallback;
+  return primary;
 #else
   return "/storage/emulated/0/games/ForceCloseOreUI/";
 #endif
@@ -82,8 +107,6 @@ SKY_AUTO_STATIC_HOOK(Hook2, memory::HookPriority::Normal, PATTERN, void,
                      void *a1, void *a2, void *a3, void *a4, void *a5, void *a6,
                      void *a7, void *a8, void *a9, void *a10, OreUi &a11,
                      void *a12) {
-
-
 
   if (!std::filesystem::exists(filePath)) {
     for (auto &data : a11.mConfigs) {
