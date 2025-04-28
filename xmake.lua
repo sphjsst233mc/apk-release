@@ -6,6 +6,7 @@ if is_plat("windows") then
 elseif is_plat("android") then   
     add_requires("dobby")
 end
+add_requires("nlohmann_json v3.11.3")
 
 target("ForceCloseOreUI")
     set_kind("shared")
@@ -13,7 +14,7 @@ target("ForceCloseOreUI")
     add_includedirs("src")
     set_languages("c++20")
     set_strip("all")
-
+    add_packages("nlohmann_json")
     if is_plat("windows") then
         add_packages("detours")
         remove_files("src/api/memory/android/**.cpp","src/api/memory/android/**.h")

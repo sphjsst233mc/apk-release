@@ -1,8 +1,12 @@
+#include <filesystem>
+#include <fstream>
 #include <functional>
 #include <string>
 #include <unordered_map>
 
 #include <api/memory/Hook.h>
+
+#include <nlohmann/json.hpp>
 
 #if __arm__
 #include <unistd.h>
@@ -41,14 +45,40 @@ public:
 
 #endif
 
+namespace{
+  std::string dirPath = "mods/ForceCloseOreUI/";
+  std::string filePath = dirPath + "config.json";
+  nlohmann::json outputJson;
+
 // clang-format on
 SKY_AUTO_STATIC_HOOK(Hook2, memory::HookPriority::Normal, PATTERN, void,
                      void *a1, void *a2, void *a3, void *a4, void *a5, void *a6,
                      void *a7, void *a8, void *a9, void *a10, OreUi &a11,
                      void *a12) {
+
+  if (!std::filesystem::exists(filePath)) {
+    for (auto &data : a11.mConfigs) {
+      outputJson[data.first] = false;
+    }
+    std::filesystem::create_directories(dirPath);
+    std::ofstream outFile(filePath);
+    outFile << outputJson.dump(4);
+    outFile.close();
+  } else {
+    std::ifstream inFile(filePath);
+    inFile >> outputJson;
+    inFile.close();
+  }
+
   for (auto &data : a11.mConfigs) {
-    data.second.mUnknown3 = []() { return false; };
-    data.second.mUnknown4 = []() { return false; };
+    bool value = false;
+    if (outputJson.contains(data.first) &&
+        outputJson[data.first].is_boolean()) {
+      value = outputJson[data.first];
+    }
+    data.second.mUnknown3 = [value]() { return value; };
+    data.second.mUnknown4 = [value]() { return value; };
   }
   origin(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
 }
+} // namespace
