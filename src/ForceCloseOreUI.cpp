@@ -28,20 +28,20 @@ public:
 
 // clang-format off
 #if __arm__
-#define PATTERN 
+#define OREUI_PATTERN 
    {""}
 
 #elif __aarch64__
-#define PATTERN                                                                           \
-  {                                                                                       \
+#define OREUI_PATTERN                                                                     \
+     std::initializer_list<const char *>({                                                \
     "? ? ? D1 ? ? ? A9 ? ? ? 91 ? ? ? A9 ? ? ? A9 ? ? ? A9 ? ? ? A9 ? ? ? A9 E8 03 03 AA" \
-  }
+  })
 
 #elif _WIN32
-#define PATTERN                                                                                                          \
-  {                                                                                                                      \
+#define OREUI_PATTERN                                                                                                    \
+     std::initializer_list<const char *>({                                                                               \
     "40 53 55 56 57 41 54 41 55 41 56 41 57 48 83 EC 78 48 8B 05 ? ? ? ? 48 33 C4 48 89 44 24 ? 49 8B E9 4C 89 44 24"    \
-  }                                                                                                                      \
+  })                                                                                                                     \
 
 #endif
 
@@ -103,7 +103,7 @@ nlohmann::json outputJson;
 std::string dirPath = getConfigDir();
 std::string filePath = dirPath + "config.json";
 
-SKY_AUTO_STATIC_HOOK(Hook2, memory::HookPriority::Normal, PATTERN, void,
+SKY_AUTO_STATIC_HOOK(Hook2, memory::HookPriority::Normal, OREUI_PATTERN, void,
                      void *a1, void *a2, void *a3, void *a4, void *a5, void *a6,
                      void *a7, void *a8, void *a9, void *a10, OreUi &a11,
                      void *a12) {
@@ -133,4 +133,5 @@ SKY_AUTO_STATIC_HOOK(Hook2, memory::HookPriority::Normal, PATTERN, void,
   }
   origin(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12);
 }
+
 } // namespace

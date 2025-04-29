@@ -1,29 +1,65 @@
+<p align="right">
+  <b>Language: <a href="README.zh.md">简体中文</a></b>
+</p>
+
 # ForceCloseOreUI
 
-Force close OreUI
+A handy utility to force close the Minecraft OreUI.
 
-## How to use
+---
 
-1. Extract `libminecraftpe.so` from the Minecraft APK.
-2. Download or manually compile the `.so` files from the [releases](https://github.com/dreamguxiang/ForceCloseOreUI-Android/releases/latest).
-3. Download [patchelf](https://github.com/NixOS/patchelf/releases/latest).
-4. For 32 bit (armeabi-v7a) Minecraft, run the following command:
+## How to Use
 
-    ```
-    patchelf --add-needed libForceCloseOreUI-arm.so libminecraftpe.so
-    ```
+### 🖥️ Windows
 
-5. For 64 bit (arm-v8a) Minecraft, run the following command:
+#### 1. Download the Latest DLL
 
-    ```
-    patchelf --add-needed libForceCloseOreUI-arm64.so libminecraftpe.so
-    ```
+- Go to the [Releases page](https://github.com/your-repo/releases) to download the latest `.dll` file.
 
-6. Put the modified **libminecraftpe.so** and **libForceCloseOreUI.so** back into the APK.
-7. Sign and install.
+#### 2. Installation
 
-## Discord Community
+- **If you are using [QYCottage/mc-w10-version-launcher](https://github.com/QYCottage/mc-w10-version-launcher):**
+
+  1. After downloading the desired Minecraft version via the launcher, open the game folder.
+  2. Locate the `mods` folder and place the `.dll` file inside.
+  3. Configuration file location:
+     ```
+     mods/ForceCloseOreUI/config.json
+     ```
+
+- **If you use an injector or another launcher:**
+  1. Configuration file location:
+     ```
+     C:\Users\[user name]\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\AC\mods\ForceCloseOreUI
+     ```
+
+---
+
+### 📱 Android
+
+#### 1. Download the Latest SO File
+
+- Go to the [Releases page](https://github.com/your-repo/releases) to download the latest `.so` file.
+
+#### 2. Installation
+
+- **If you are using [LeviLauncher](https://github.com/LiteLDev/LeviLaunchroid):**
+  1. Download the `.so` file.
+  2. Tap the file and choose to open with LeviLauncher for import.
+  3. Configuration file location:
+     ```
+     /storage/emulated/0/games/ForceCloseOreUI/
+     ```
+     > **Note:** Modified APK files are NOT provided.
+
+---
+
+## 📢 Discord Community
 
 Join our Discord community for support and discussion!
 
-[Join Discord](https://discord.gg/8nGcV8QkKZ)
+[![Join Discord](https://img.shields.io/discord/8nGcV8QkKZ?logo=discord&style=for-the-badge&label=Discord)](https://discord.gg/8nGcV8QkKZ)
+
+---
+
+> Thank you for your support and for using our tool!

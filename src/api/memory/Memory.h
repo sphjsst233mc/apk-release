@@ -34,3 +34,6 @@ constexpr FuncPtr toFuncPtr(T t) {
 }
 
 } // namespace memory
+
+#define CC_CALL(iname, address, Ret, ...)                                      \
+  ((Ret(*)(__VA_ARGS__))(memory::resolveSignature(address)))
