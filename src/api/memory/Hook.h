@@ -108,9 +108,8 @@ template <typename T> struct HookAutoRegister {
   struct DEF_TYPE TYPE {                                                       \
     using FuncPtr = ::memory::FuncPtr;                                         \
     using HookPriority = ::memory::HookPriority;                               \
-    static constexpr auto IDENTIFIER_STORAGE = IDENTIFIER;                     \
     using OriginFuncType = ::memory::AddConstAtMemberFunIfOriginIs<            \
-        RET_TYPE FUNC_PTR(__VA_ARGS__), decltype(IDENTIFIER_STORAGE)>;         \
+        RET_TYPE FUNC_PTR(__VA_ARGS__), decltype(IDENTIFIER)>;                 \
                                                                                \
     inline static FuncPtr target{};                                            \
     inline static OriginFuncType originFunc{};                                 \
