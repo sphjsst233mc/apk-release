@@ -14,7 +14,7 @@
 
 #### 1. 获取最新 DLL 文件
 
-- 前往 [Release 页面](https://github.com/你的仓库/releases) 下载最新版本的 `.dll` 文件。
+- 前往 [Release 页面](https://github.com/QYCottage/ForceCloseOreUI/releases) 下载最新版本的 `.dll` 文件。
 
 #### 2. 安装方式
 
@@ -39,7 +39,7 @@
 
 #### 1. 获取最新 SO 文件
 
-- 前往 [Release 页面](https://github.com/你的仓库/releases) 下载最新版本的 `.so` 文件。
+- 前往 [Release 页面](https://github.com/QYCottage/ForceCloseOreUI/releases) 下载最新版本的 `.so` 文件。
 
 #### 2. 安装方式
 

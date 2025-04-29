@@ -14,7 +14,7 @@ A handy utility to force close the Minecraft OreUI.
 
 #### 1. Download the Latest DLL
 
-- Go to the [Releases page](https://github.com/your-repo/releases) to download the latest `.dll` file.
+- Go to the [Releases page](https://github.com/QYCottage/ForceCloseOreUI/releases) to download the latest `.dll` file.
 
 #### 2. Installation
 
@@ -39,7 +39,7 @@ A handy utility to force close the Minecraft OreUI.
 
 #### 1. Download the Latest SO File
 
-- Go to the [Releases page](https://github.com/your-repo/releases) to download the latest `.so` file.
+- Go to the [Releases page](https://github.com/QYCottage/ForceCloseOreUI/releases) to download the latest `.so` file.
 
 #### 2. Installation
 
