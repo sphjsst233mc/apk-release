@@ -6,10 +6,89 @@
 #include <unordered_map>
 
 #include "api/memory/Hook.h"
-
+namespace fs = std::filesystem;
 #if __arm__
 #include <unistd.h>
 extern "C" int __wrap_getpagesize() { return sysconf(_SC_PAGESIZE); }
+
+#endif
+
+#if __arm__ || __aarch64__
+#include "jni.h"
+JNIEnv *env = nullptr;
+
+jobject getGlobalContext(JNIEnv *env) {
+  jclass activity_thread = env->FindClass("android/app/ActivityThread");
+  jmethodID current_activity_thread =
+      env->GetStaticMethodID(activity_thread, "currentActivityThread",
+                             "()Landroid/app/ActivityThread;");
+  jobject at =
+      env->CallStaticObjectMethod(activity_thread, current_activity_thread);
+  jmethodID get_application = env->GetMethodID(
+      activity_thread, "getApplication", "()Landroid/app/Application;");
+  jobject context = env->CallObjectMethod(at, get_application);
+  if (env->ExceptionCheck())
+    env->ExceptionClear();
+  return context;
+}
+
+std::string getAbsolutePath(JNIEnv *env, jobject file) {
+  jclass file_class = env->GetObjectClass(file);
+  jmethodID get_abs_path =
+      env->GetMethodID(file_class, "getAbsolutePath", "()Ljava/lang/String;");
+  auto jstr = (jstring)env->CallObjectMethod(file, get_abs_path);
+  if (env->ExceptionCheck())
+    env->ExceptionClear();
+  const char *cstr = env->GetStringUTFChars(jstr, nullptr);
+  std::string result(cstr);
+  env->ReleaseStringUTFChars(jstr, cstr);
+  return result;
+}
+
+std::string getPackageName(JNIEnv *env, jobject context) {
+  jclass context_class = env->GetObjectClass(context);
+  jmethodID get_pkg_name =
+      env->GetMethodID(context_class, "getPackageName", "()Ljava/lang/String;");
+  auto jstr = (jstring)env->CallObjectMethod(context, get_pkg_name);
+  if (env->ExceptionCheck())
+    env->ExceptionClear();
+  const char *cstr = env->GetStringUTFChars(jstr, nullptr);
+  std::string result(cstr);
+  env->ReleaseStringUTFChars(jstr, cstr);
+  return result;
+}
+
+std::string getInternalStoragePath(JNIEnv *env) {
+  jclass env_class = env->FindClass("android/os/Environment");
+  jmethodID get_storage_dir = env->GetStaticMethodID(
+      env_class, "getExternalStorageDirectory", "()Ljava/io/File;");
+  jobject storage_dir = env->CallStaticObjectMethod(env_class, get_storage_dir);
+  return getAbsolutePath(env, storage_dir);
+}
+
+std::string GetModsFilesPath(JNIEnv *env) {
+  jobject app_context = getGlobalContext(env);
+  if (!app_context) {
+    return "";
+  }
+  auto package_name = getPackageName(env, app_context);
+  for (auto &c : package_name)
+    c = tolower(c);
+
+  return (fs::path(getInternalStoragePath(env)) / "Android" / "data" /
+          package_name / "mods");
+}
+
+SKY_AUTO_STATIC_HOOK(
+    Hook1, memory::HookPriority::Normal,
+    std::initializer_list<const char *>(
+        {"? ? ? D1 ? ? ? A9 ? ? ? 91 ? ? ? A9 ? ? ? A9 ? ? ? A9 ? ? ? A9 ? ? ? "
+         "A9 ? ? ? D5 ? ? ? F9 ? ? ? F8 ? ? ? 39 ? ? ? 34 ? ? ? 12"}),
+    int, void *_this, JavaVM *vm) {
+
+  vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_4);
+  return origin(_this, vm);
+}
 
 #endif
 
@@ -95,19 +174,34 @@ std::string getConfigDir() {
     return fallback;
   return primary;
 #else
-  return "/storage/emulated/0/games/ForceCloseOreUI/";
+  std::string primary = "/storage/emulated/0/games";
+  if (!primary.empty()) {
+    primary += "/ForceCloseOreUI/";
+    if (testDirWritable(primary))
+      return primary;
+  }
+  if (!env)
+    return primary;
+  std::string base = GetModsFilesPath(env);
+  if (!base.empty()) {
+    base += "/ForceCloseOreUI/";
+    if (testDirWritable(base))
+      return base;
+  }
+  return primary;
 #endif
 }
 
 nlohmann::json outputJson;
-std::string dirPath = getConfigDir();
+std::string dirPath = "";
 std::string filePath = dirPath + "config.json";
 
 SKY_AUTO_STATIC_HOOK(Hook2, memory::HookPriority::Normal, OREUI_PATTERN, void,
                      void *a1, void *a2, void *a3, void *a4, void *a5, void *a6,
                      void *a7, void *a8, void *a9, void *a10, OreUi &a11,
                      void *a12) {
-
+  dirPath = getConfigDir();
+  filePath = dirPath + "config.json";
   if (!std::filesystem::exists(filePath)) {
     for (auto &data : a11.mConfigs) {
       outputJson[data.first] = false;

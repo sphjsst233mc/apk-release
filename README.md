@@ -48,7 +48,7 @@ A handy utility to force close the Minecraft OreUI.
   2. Tap the file and choose to open with LeviLauncher for import.
   3. Configuration file location:
      ```
-     /storage/emulated/0/games/ForceCloseOreUI/
+     /storage/emulated/0/Android/data/[minecraft package name]/mods/ForceCloseOreUI
      ```
      > **Note:** Modified APK files are NOT provided.
 

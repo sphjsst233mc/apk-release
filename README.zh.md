@@ -48,7 +48,7 @@
   2. 点击该文件，选择用 LeviLauncher 打开，即可导入。
   3. 配置文件路径：
      ```
-     /storage/emulated/0/games/ForceCloseOreUI/
+     /storage/emulated/0/Android/data/[minecraft package name]/mods/ForceCloseOreUI
      ```
      > **注意**：不提供修改后的 APK 文件。
 
