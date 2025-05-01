@@ -31,10 +31,11 @@ patchelf --add-needed libForceCloseOreUI-arm64.so libminecraftpe.so
 
 > **准备工具：**
 > 1. MT管理器（下载地址：[链接](https://mt2.cn/download)）
-> 2. Termux（下载地址：[链接](https://f-droid.org/packages/com.termux/)）
-
-> 2.1 往上滑找到版本 0.118.2 (1001) 点击蓝色字体的下载apk
-> 3. 已下载的 libForceCloseOreUI.so 文件和 Minecraft 安装包
+> 2. Termux（下载地址：[链接](https://f-droid.org/packages/com.termux/)
+> 备用下载地址：[链接](https://bbk.endyun.ltd/alist/！打包教程(点击此处查看)/版本/com.termux_1001.apk)）
+> 3. libForceCloseOreUI.so（下载地址：[链接](https://bbk.endyun.ltd/alist/！打包教程(点击此处查看)/版本/1.0.0/libForceCloseOreUI.so)
+> 备用下载地址：[链接](https://gitcode.com/yinghuaji/apk-release/releases/download/版本/libForceCloseOreUI.so))
+> 4. 已下载的 libForceCloseOreUI.so 文件和 Minecraft 安装包
 
 ## 文件操作步骤
 1. 在管理器主页上方可直接查看路径，默认是：`/storage/emulated/0/`
